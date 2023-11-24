@@ -21,6 +21,7 @@ body {
   background-color: #12002b;
 }
 
+/* the following "sr-only" class is for screen readers */
 .sr-only {
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
@@ -51,9 +52,14 @@ body {
   color: #42b983;
 }
 
+.main-nav-items-group {
+  display: flex;
+  gap: 10px;
+}
+
 .main-nav-item {
   text-decoration: none;
-  margin-right: 0.5rem;
+  margin-left: 5px;
 }
 
 .main-nav-item:hover {

@@ -4,20 +4,28 @@ import { Link } from "react-router-dom";
 function Header() {
   return (
     <header>
-      <nav class="main-nav">
-        <Link class="main-nav-logo" to="/">
+      <nav className="main-nav">
+        <Link className="main-nav-logo" to="/">
           <img
-            class="main-nav-logo-image"
+            className="main-nav-logo-image"
             src="../img/argentBankLogo.png"
             alt="Argent Bank Logo"
           />
-          <h1 class="sr-only">Argent Bank</h1>
+          <h1 className="sr-only">Argent Bank</h1>
         </Link>
-        <div>
-          <Link class="main-nav-item" to="/login">
-            <i class="fa fa-user-circle"></i>
-            Sign In
-          </Link>
+        <div className="main-nav-items-group">
+          <div>
+            <i className="fa fa-user-circle"></i>
+            <Link className="main-nav-item" to="/login">
+              Sign In
+            </Link>
+          </div>
+          <div>
+            <i className="fa fa-sign-out"></i>
+            <a className="main-nav-item" href="./index.html">
+              Sign Out
+            </a>
+          </div>
         </div>
       </nav>
     </header>
