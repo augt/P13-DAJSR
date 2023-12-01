@@ -8,6 +8,9 @@ html {
 
 body {
   margin: 0;
+}
+
+body > div {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -169,6 +172,11 @@ body {
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
 }
 
 .sign-in-content {

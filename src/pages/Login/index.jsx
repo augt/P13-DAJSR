@@ -1,7 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+/* import { Link } from "react-router-dom"; */
+import { login } from "../../redux/user/userSlice";
 
 function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.user);
+  console.log(token);
+  async function onLoginClick() {
+    try {
+      await dispatch(login({ username, password })).unwrap();
+      if (errorMessage) {
+        setErrorMessage(null);
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+    }
+  }
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
@@ -9,24 +28,43 @@ function Login() {
         <h1>Sign In</h1>
         <form>
           <div className="input-wrapper">
-            <label for="username">Username</label>
-            <input type="text" id="username" />
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              onChange={(event) => {
+                setUsername(event.target.value);
+              }}
+            />
           </div>
           <div className="input-wrapper">
-            <label for="password">Password</label>
-            <input type="password" id="password" />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
           </div>
           <div className="input-remember">
             <input type="checkbox" id="remember-me" />
-            <label for="remember-me">Remember me</label>
+            <label htmlFor="remember-me">Remember me</label>
           </div>
-          {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-          <Link to="/profile" className="sign-in-button">
+
+          <button
+            className="sign-in-button"
+            onClick={(e) => {
+              e.preventDefault();
+              onLoginClick();
+            }}
+          >
             Sign In
-          </Link>
-          {/*  <!-- SHOULD BE THE BUTTON BELOW --> */}
-          {/* <!-- <button className="sign-in-button">Sign In</button> -->
-      <!--  --> */}
+          </button>
+          <div className="error-message">{errorMessage}</div>
+          {/* <Link to="/profile" className="sign-in-button">
+            Sign In
+          </Link> */}
         </form>
       </section>
     </main>

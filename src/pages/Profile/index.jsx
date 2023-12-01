@@ -33,8 +33,8 @@ function Profile() {
         <button className="edit-button">Edit Name</button>
       </div>
       <h2 className="sr-only">Accounts</h2>
-      {bankAccountsList.map((bankAccount) => (
-        <section className="account">
+      {bankAccountsList.map((bankAccount, index) => (
+        <section className="account" key={index}>
           <div className="account-content-wrapper">
             <h3 className="account-title">
               Argent Bank {bankAccount.type} (x{bankAccount.number})

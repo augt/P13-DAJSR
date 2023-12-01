@@ -31,8 +31,8 @@ function Home() {
       </div>
       <section className="features">
         <h2 className="sr-only">Features</h2>
-        {featuresList.map((feature) => (
-          <div className="feature-item">
+        {featuresList.map((feature, index) => (
+          <div className="feature-item" key={index}>
             <img
               src={`../img/icon-${feature.icon}.png`}
               alt={`${feature.icon} icon`}
