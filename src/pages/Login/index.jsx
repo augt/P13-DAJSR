@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 /* import { Link } from "react-router-dom"; */
-import { login } from "../../redux/user/userSlice";
+import { login, getUserProfile } from "../../redux/user/userSlice";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.user);
-  console.log(token);
+
+  useEffect(() => {
+    async function fetchUser() {
+      if (token) {
+        try {
+          await dispatch(getUserProfile({ token })).unwrap();
+
+          navigate("/profile");
+        } catch (error) {
+          console.log(error);
+          setErrorMessage(error.message);
+        }
+      }
+    }
+    fetchUser();
+  }, [token]);
+
   async function onLoginClick() {
     try {
       await dispatch(login({ username, password })).unwrap();
@@ -21,6 +39,7 @@ function Login() {
       setErrorMessage(error.message);
     }
   }
+
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">

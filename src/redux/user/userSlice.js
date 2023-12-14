@@ -2,15 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  email: null,
   firstName: null,
   lastName: null,
-  email: null,
+  createdAt: null,
+  updatedAt: null,
+  id: null,
   isConnected: false,
   token: null,
-  /* status: "idle", */
 };
 
-const loginUrl = "http://localhost:3001/api/v1/user/login";
+const userApiUrl = "http://localhost:3001/api/v1/user";
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -21,7 +23,7 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ username, password }) => {
     try {
-      const response = await axios.post(loginUrl, {
+      const response = await axios.post(`${userApiUrl}/login`, {
         email: username,
         password: password,
       });
@@ -37,11 +39,40 @@ export const login = createAsyncThunk(
   }
 );
 
-export const counterSlice = createSlice({
+export const getUserProfile = createAsyncThunk(
+  "user/getUserProfile",
+  async ({ token }) => {
+    console.log(token);
+    try {
+      const response = await axios.post(
+        `${userApiUrl}/profile`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        throw error.response.data;
+      } else {
+        throw error.message;
+      }
+    }
+  }
+);
+
+export const userSlice = createSlice({
   name: "user",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+    logout: (state) => {
+      Object.assign(state, initialState);
+    },
     /* increment: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -67,9 +98,14 @@ export const counterSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         if (action.payload.status && action.payload.status === 200) {
           state.token = action.payload.body.token;
+          state.isConnected = true;
         }
-      });
-    /* .addCase(login.rejected, (state, action) => {
+      })
+      .addCase(getUserProfile.fulfilled, (state, action) => {
+        if (action.payload.status && action.payload.status === 200) {
+          Object.assign(state, action.payload.body);
+        }
+      }); /* .addCase(login.rejected, (state, action) => {
         state.status = "failed";
         console.log(action);
         state.loginError = action.payload;
@@ -77,7 +113,7 @@ export const counterSlice = createSlice({
   },
 });
 
-/* export const { increment, decrement, incrementByAmount } = counterSlice.actions; */
+export const { logout } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -93,4 +129,4 @@ export const selectUser = (state) => state.user;
   }
 }; */
 
-export default counterSlice.reducer;
+export default userSlice.reducer;

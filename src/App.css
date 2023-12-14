@@ -55,17 +55,18 @@ body > div {
   color: #42b983;
 }
 
-.main-nav-items-group {
-  display: flex;
-  gap: 10px;
-}
-
 .main-nav-item {
   text-decoration: none;
-  margin-left: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .main-nav-item:hover {
+  cursor: pointer;
+}
+
+.main-nav-item a:hover,
+.main-nav-item div:hover {
   text-decoration: underline;
 }
 

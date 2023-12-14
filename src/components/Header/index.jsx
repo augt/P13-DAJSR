@@ -1,7 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/user/userSlice";
 
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isConnected } = useSelector((state) => state.user);
+
+  function onlogoutClick() {
+    dispatch(logout());
+    navigate("/");
+  }
   return (
     <header>
       <nav className="main-nav">
@@ -13,20 +23,21 @@ function Header() {
           />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
-        <div className="main-nav-items-group">
-          <div>
+
+        {!isConnected && (
+          <div className="main-nav-item">
             <i className="fa fa-user-circle"></i>
             <Link className="main-nav-item" to="/login">
               Sign In
             </Link>
           </div>
-          <div>
+        )}
+        {isConnected && (
+          <div className="main-nav-item" onClick={onlogoutClick}>
             <i className="fa fa-sign-out"></i>
-            <a className="main-nav-item" href="./index.html">
-              Sign Out
-            </a>
+            <div>Sign Out</div>
           </div>
-        </div>
+        )}
       </nav>
     </header>
   );
