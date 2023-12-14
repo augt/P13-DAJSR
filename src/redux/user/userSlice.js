@@ -42,11 +42,38 @@ export const login = createAsyncThunk(
 export const getUserProfile = createAsyncThunk(
   "user/getUserProfile",
   async ({ token }) => {
-    console.log(token);
     try {
       const response = await axios.post(
         `${userApiUrl}/profile`,
         {},
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        throw error.response.data;
+      } else {
+        throw error.message;
+      }
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "user/updateUserProfile",
+  async ({ token, editedFirstName, editedLastName }) => {
+    try {
+      const response = await axios.put(
+        `${userApiUrl}/profile`,
+        {
+          firstName: editedFirstName,
+          lastName: editedLastName,
+        },
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -102,6 +129,11 @@ export const userSlice = createSlice({
         }
       })
       .addCase(getUserProfile.fulfilled, (state, action) => {
+        if (action.payload.status && action.payload.status === 200) {
+          Object.assign(state, action.payload.body);
+        }
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
         if (action.payload.status && action.payload.status === 200) {
           Object.assign(state, action.payload.body);
         }

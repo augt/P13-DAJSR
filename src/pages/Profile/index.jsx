@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserProfile } from "../../redux/user/userSlice";
 
 const bankAccountsList = [
   {
@@ -22,15 +25,85 @@ const bankAccountsList = [
 ];
 
 function Profile() {
+  const { isConnected, firstName, lastName, token } = useSelector(
+    (state) => state.user
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [editedFirstName, setEditedFirstName] = useState(firstName);
+  const [editedLastName, setEditedLastName] = useState(lastName);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  useEffect(() => {
+    if (!isConnected) navigate("/login");
+  });
+
+  async function onSubmitClick() {
+    try {
+      await dispatch(
+        updateUserProfile({ token, editedFirstName, editedLastName })
+      ).unwrap();
+      if (errorMessage) {
+        setErrorMessage(null);
+      }
+      setIsFormOpen(false);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+    }
+  }
+
   return (
     <main className="main bg-dark">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {!isFormOpen && `${firstName} ${lastName}!`}
         </h1>
-        <button className="edit-button">Edit Name</button>
+        {!isFormOpen && (
+          <button className="edit-button" onClick={() => setIsFormOpen(true)}>
+            Edit Name
+          </button>
+        )}
+        {isFormOpen && (
+          <form>
+            <div>
+              <input
+                type="text"
+                name="firstName"
+                defaultValue={editedFirstName}
+                onChange={(e) => setEditedFirstName(e.target.value)}
+              />
+              <input
+                type="text"
+                name="lastName"
+                defaultValue={editedLastName}
+                onChange={(e) => setEditedLastName(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                type="submit"
+                name="submit"
+                value="Save"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSubmitClick();
+                }}
+              />
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsFormOpen(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+            <div className="error-message">{errorMessage}</div>
+          </form>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       {bankAccountsList.map((bankAccount, index) => (

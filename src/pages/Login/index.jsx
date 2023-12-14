@@ -10,7 +10,11 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token } = useSelector((state) => state.user);
+  const { token, isConnected } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isConnected) navigate("/");
+  });
 
   useEffect(() => {
     async function fetchUser() {
@@ -26,7 +30,7 @@ function Login() {
       }
     }
     fetchUser();
-  }, [token]);
+  }, [token, dispatch, navigate]);
 
   async function onLoginClick() {
     try {
@@ -81,9 +85,6 @@ function Login() {
             Sign In
           </button>
           <div className="error-message">{errorMessage}</div>
-          {/* <Link to="/profile" className="sign-in-button">
-            Sign In
-          </Link> */}
         </form>
       </section>
     </main>
