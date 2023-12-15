@@ -67,32 +67,36 @@ function Profile() {
           </button>
         )}
         {isFormOpen && (
-          <form>
-            <div>
+          <form className="edit-form">
+            <div className="edit-name-inputs-group right">
               <input
+              className="edit-name-input"
                 type="text"
                 name="firstName"
                 defaultValue={editedFirstName}
                 onChange={(e) => setEditedFirstName(e.target.value)}
               />
               <input
-                type="text"
-                name="lastName"
-                defaultValue={editedLastName}
-                onChange={(e) => setEditedLastName(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
                 type="submit"
                 name="submit"
                 value="Save"
+                className="edit-button"
                 onClick={(e) => {
                   e.preventDefault();
                   onSubmitClick();
                 }}
               />
+            </div>
+            <div className="edit-name-inputs-group left">
+              <input
+              className="edit-name-input"
+                type="text"
+                name="lastName"
+                defaultValue={editedLastName}
+                onChange={(e) => setEditedLastName(e.target.value)}
+              />
               <button
+              className="edit-button"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsFormOpen(false);

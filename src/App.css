@@ -272,6 +272,32 @@ body > div {
   color: #fff;
   font-weight: bold;
   padding: 10px;
+  width: fit-content;
+}
+
+.edit-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.edit-name-inputs-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
+
+.right {
+  align-items: end;
+}
+
+.left {
+  align-items: start;
+}
+
+.edit-name-input {
+  padding: 5px;
+  font-size: 1.2rem;
 }
 
 .header {
