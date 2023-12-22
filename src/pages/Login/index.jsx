@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-/* import { Link } from "react-router-dom"; */
 import { login, getUserProfile } from "../../redux/user/userSlice";
 
 function Login() {
